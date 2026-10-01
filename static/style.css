@@ -107,3 +107,262 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding-block
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
 }
+
+.device-name-form {
+  margin-bottom: 22px;
+  padding: 16px 0 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.device-name-form label {
+  display: block;
+  margin-bottom: 9px;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.device-name-controls {
+  display: flex;
+  gap: 9px;
+}
+
+.device-name-controls input {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--ink);
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 12px;
+}
+
+.device-name-controls input:focus {
+  outline: 2px solid var(--green-deep);
+  outline-offset: 1px;
+}
+
+.device-name-controls button {
+  flex: 0 0 auto;
+  border: 0;
+  background: var(--ink);
+  color: var(--green);
+  padding: 10px 13px;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.device-name-controls button:hover {
+  background: var(--green-deep);
+}
+
+.device-name-controls button:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+
+.device-name-note {
+  margin: 9px 0 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.name-feedback {
+  margin-top: 9px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.name-feedback[data-state="error"] {
+  color: #8d3a2c;
+}
+
+.name-feedback[data-state="ready"] {
+  color: var(--green-deep);
+}
+
+.peer {
+  min-width: 0;
+}
+
+.peer-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+}
+
+.peer-button.selected {
+  outline: 2px solid var(--green-deep);
+  outline-offset: 7px;
+}
+
+.peer-button strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.peer-button small {
+  display: block;
+  opacity: .65;
+  margin-top: 3px;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 9px;
+}
+
+.peer-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #6c9e51;
+  flex: 0 0 auto;
+}
+
+.test-panel {
+  border-top: 1px solid currentColor;
+  padding-top: 18px;
+}
+
+.test-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.test-controls input {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid currentColor;
+  background: transparent;
+  padding: 12px 14px;
+  font: inherit;
+}
+
+.test-controls button {
+  border: 1px solid currentColor;
+  background: currentColor;
+  color: var(--bg, #f4f5ef);
+  padding: 12px 16px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.message-log {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 0;
+}
+
+.log-entry {
+  padding: 9px 0;
+  border-top: 1px solid rgba(0, 0, 0, .15);
+}
+
+.log-entry.incoming::before {
+  content: '← ';
+}
+
+.log-entry.outgoing::before {
+  content: '→ ';
+}
+
+.status[data-state="error"] .status-dot {
+  background: #b33;
+}
+
+.status[data-state="ready"] .status-dot {
+  background: #2b7;
+}
+
+.transfer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.secondary-button,
+.send-form-button {
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--green);
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.secondary-button {
+  background: transparent;
+  color: var(--ink);
+}
+
+.secondary-button:hover,
+.send-form-button:hover {
+  background: var(--green-deep);
+  color: var(--green);
+}
+
+.package-inspection {
+  margin-top: 16px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: rgb(255 255 255 / 66%);
+}
+
+.package-inspection h3 {
+  margin-bottom: 14px;
+}
+
+.inspection-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+}
+
+.inspection-row span {
+  color: var(--muted);
+}
+
+.inspection-row code {
+  overflow-wrap: anywhere;
+  color: var(--ink);
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 10px;
+}
+
+@media (max-width: 600px) {
+  .inspection-row {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+
+  .transfer-actions {
+    justify-content: flex-start;
+  }
+
+  .device-name-controls {
+    flex-direction: column;
+  }
+
+  .device-name-controls button {
+    width: 100%;
+  }
+}

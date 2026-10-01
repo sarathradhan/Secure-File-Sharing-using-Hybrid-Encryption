@@ -4,94 +4,707 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f5ef">
+
   <title>Secure File Sharing | Hybrid Encryption</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}"
+  >
+
+  <script
+    src="{{ url_for('static', filename='script.js') }}"
+    defer
+  ></script>
 </head>
+
 <body>
+
   <header class="topbar">
-    <a class="brand" href="/" aria-label="Secure File Sharing home">
-      <span class="brand-mark" aria-hidden="true">S</span>
-      <span>SECURE FILE SHARING</span>
+
+    <a
+      class="brand"
+      href="/"
+      aria-label="Secure File Sharing home"
+    >
+      <span
+        class="brand-mark"
+        aria-hidden="true"
+      >
+        S
+      </span>
+
+      <span>
+        SECURE FILE SHARING
+      </span>
     </a>
+
     <div class="top-actions">
-      <a class="top-action" href="{{ url_for('send_file') }}">Send a file</a>
-      <a class="top-action" href="{{ url_for('receive_file') }}">Receive a file</a>
-      <span class="status"><span class="status-dot"></span> RSA KEYS READY</span>
+      <span class="status">
+        <span
+          class="status-dot"
+        ></span>
+
+        <span
+          id="connection-status"
+        >
+          CONNECTING…
+        </span>
+      </span>
     </div>
+
   </header>
 
+
   <main>
-    <section class="intro" aria-labelledby="page-title">
-      <p class="eyebrow">CRYPTOGRAPHY &amp; NETWORK SECURITY</p>
-      <h1 id="page-title">A safer route<br>for your files.</h1>
-      <p class="lede">A local proof of concept for protecting a file before it moves from sender to receiver, using hybrid encryption and verifiable identity.</p>
+
+    <!-- =========================================================
+         INTRODUCTION
+         ========================================================= -->
+
+    <section
+      class="intro"
+      aria-labelledby="page-title"
+    >
+
+      <p class="eyebrow">
+        CRYPTOGRAPHY &amp; NETWORK SECURITY
+      </p>
+
+      <h1 id="page-title">
+        Secure file sharing<br>
+        over your local network.
+      </h1>
+
+      <p class="lede">
+        One Flask process hosts the web application and relays
+        traffic. Every open browser is an independent endpoint
+        with its own cryptographic identity.
+      </p>
+
       <div class="notice">
-        <span class="notice-icon" aria-hidden="true">i</span>
-        <p><strong>Hybrid encryption is ready</strong><br>Encrypt a file for the receiver, then use their private key to recover it.</p>
+
+        <span
+          class="notice-icon"
+          aria-hidden="true"
+        >
+          i
+        </span>
+
+        <p>
+          <strong>
+            Secure transfer enabled
+          </strong>
+
+          <br>
+
+          Each browser keeps its own private keys.
+          Files are encrypted and signed in the browser
+          before Flask relays the package; the receiving
+          browser decrypts and verifies it.
+        </p>
+
       </div>
+
     </section>
 
-    <section class="design" aria-labelledby="design-title">
+
+    <!-- =========================================================
+         NETWORK DESIGN
+         ========================================================= -->
+
+    <section
+      class="design"
+      aria-labelledby="network-title"
+    >
+
       <div class="section-heading">
+
         <div>
-          <p class="eyebrow">THE SECURITY DESIGN</p>
-          <h2 id="design-title">Four layers, one protected file.</h2>
+
+          <p class="eyebrow">
+            CURRENT NETWORK DESIGN
+          </p>
+
+          <h2 id="network-title">
+            Two browsers, one Flask relay.
+          </h2>
+
         </div>
-        <span class="design-index">01 — 04</span>
+
+        <span class="design-index">
+          01 — 05
+        </span>
+
       </div>
+
+
       <ol class="layers">
+
         <li>
-          <span class="layer-number">01</span>
-          <div><h3>Encrypt the file</h3><p>AES-256-GCM protects file contents and authenticates the encrypted data.</p></div>
-          <span class="algorithm">AES-256-GCM</span>
+
+          <span class="layer-number">
+            01
+          </span>
+
+          <div>
+            <h3>
+              Flask hosts the application
+            </h3>
+
+            <p>
+              The server process listens on the LAN
+              and keeps track of connected browser peers.
+            </p>
+          </div>
+
+          <span class="algorithm">
+            NETWORK
+          </span>
+
         </li>
+
+
         <li>
-          <span class="layer-number">02</span>
-          <div><h3>Wrap the secret key</h3><p>RSA-2048 protects the AES key so only the intended receiver can recover it.</p></div>
-          <span class="algorithm">RSA-2048</span>
+
+          <span class="layer-number">
+            02
+          </span>
+
+          <div>
+            <h3>
+              Each browser creates an identity
+            </h3>
+
+            <p>
+              Every browser generates its own RSA-PSS
+              signing and RSA-OAEP encryption key pairs.
+            </p>
+          </div>
+
+          <span class="algorithm">
+            RSA-2048
+          </span>
+
         </li>
+
+
         <li>
-          <span class="layer-number">03</span>
-          <div><h3>Check integrity</h3><p>A SHA-256 digest helps detect unexpected changes to the file.</p></div>
-          <span class="algorithm">SHA-256</span>
+
+          <span class="layer-number">
+            03
+          </span>
+
+          <div>
+            <h3>
+              Private keys stay local
+            </h3>
+
+            <p>
+              Only public keys are registered with Flask.
+              Browser private keys remain non-exportable.
+            </p>
+          </div>
+
+          <span class="algorithm">
+            LOCAL KEY
+          </span>
+
         </li>
+
+
         <li>
-          <span class="layer-number">04</span>
-          <div><h3>Verify the sender</h3><p>A digital signature lets the receiver verify who sent the file.</p></div>
-          <span class="algorithm">RSA SIGNATURE</span>
+
+          <span class="layer-number">
+            04
+          </span>
+
+          <div>
+            <h3>
+              Browsers discover each other
+            </h3>
+
+            <p>
+              A browser appears here only after it
+              successfully reaches this Flask server
+              and registers.
+            </p>
+          </div>
+
+          <span class="algorithm">
+            PUBLIC KEY
+          </span>
+
         </li>
+
+
+        <li>
+
+          <span class="layer-number">
+            05
+          </span>
+
+          <div>
+            <h3>
+              Files are encrypted at the browser endpoints
+            </h3>
+
+            <p>
+              AES-256-GCM protects the file,
+              RSA-OAEP protects the AES key,
+              SHA-256 checks integrity, and
+              RSA-PSS authenticates the sender.
+            </p>
+          </div>
+
+          <span class="algorithm">
+            CRYPTO
+          </span>
+
+        </li>
+
       </ol>
 
-      <section class="key-management" aria-labelledby="key-management-title">
+
+      <!-- =======================================================
+           BROWSER IDENTITY
+           ======================================================= -->
+
+      <section
+        class="key-management"
+        aria-labelledby="identity-title"
+      >
+
         <div class="key-heading">
-          <p class="eyebrow">LOCAL KEY STORE</p>
-          <h2 id="key-management-title">Key Management</h2>
+
+          <p class="eyebrow">
+            BROWSER IDENTITY
+          </p>
+
+          <h2 id="identity-title">
+            This browser
+          </h2>
+
         </div>
+
+
+        <!-- ONE display-name box only -->
+
+        <div class="device-name-form">
+
+          <label for="display-name">
+            Display name
+          </label>
+
+          <div class="device-name-controls">
+
+            <input
+              id="display-name"
+              type="text"
+              maxlength="32"
+              placeholder="Enter a display name"
+              autocomplete="off"
+            >
+
+            <button
+              id="save-name"
+              type="button"
+            >
+              SAVE NAME
+            </button>
+
+          </div>
+
+
+          <p class="device-name-note">
+            This name is shown to other connected browsers.
+            Your cryptographic identity remains the separate
+            Client ID.
+          </p>
+
+
+          <div
+            class="name-feedback"
+            id="name-status"
+            hidden
+          ></div>
+
+        </div>
+
+
+        <!-- Technical browser identity information -->
+
         <ul class="key-list">
+
           <li class="key-item">
+
             <div>
-              <h3>Sender Public Key</h3>
-              <p>Used by the receiver to verify sender signatures.</p>
+
+              <h3>
+                Client ID
+              </h3>
+
+              <p id="client-id">
+                Generating…
+              </p>
+
             </div>
-            <span class="key-availability">{{ 'Available' if sender_public_available else 'Unavailable' }}</span>
+
+            <span class="key-availability">
+              LOCAL
+            </span>
+
           </li>
+
+
           <li class="key-item">
+
             <div>
-              <h3>Receiver Public Key</h3>
-              <p>Used by the sender to protect a key for the receiver.</p>
+
+              <h3>
+                Current web origin
+              </h3>
+
+              <p id="browser-origin">
+                Detecting…
+              </p>
+
             </div>
-            <span class="key-availability">{{ 'Available' if receiver_public_available else 'Unavailable' }}</span>
+
+            <span class="key-availability">
+              HTTPS
+            </span>
+
           </li>
+
+
+          <li class="key-item">
+
+            <div>
+
+              <h3>
+                Private keys
+              </h3>
+
+              <p>
+                Stored as non-exportable browser
+                CryptoKeys and never sent to Flask.
+              </p>
+
+            </div>
+
+            <span class="key-availability">
+              PRIVATE
+            </span>
+
+          </li>
+
         </ul>
-        <p class="key-footnote">The sender private key will sign files; the receiver private key will open keys intended for them. Private key contents are never rendered here.</p>
+
       </section>
+
+
+      <!-- =======================================================
+           LAN PEERS
+           ======================================================= -->
+
+      <section
+        class="key-management"
+        aria-labelledby="peers-title"
+      >
+
+        <div class="key-heading">
+
+          <p class="eyebrow">
+            LAN PEERS
+          </p>
+
+          <h2 id="peers-title">
+            Connected browsers
+          </h2>
+
+        </div>
+
+
+        <ul
+          class="key-list"
+          id="peer-list"
+        >
+
+          <li
+            id="peer-empty"
+            class="key-item"
+          >
+
+            <div>
+
+              <h3>
+                No other browser yet
+              </h3>
+
+              <p>
+                Open this same HTTPS URL on the
+                other device. Its browser identity
+                should appear here.
+              </p>
+
+            </div>
+
+            <span class="key-availability">
+              WAITING
+            </span>
+
+          </li>
+
+        </ul>
+
+      </section>
+
+
+      <!-- =======================================================
+           FILE SENDING
+           ======================================================= -->
+
+      <section
+        class="key-management"
+        aria-labelledby="transfer-title"
+      >
+
+        <div class="key-heading">
+
+          <p class="eyebrow">
+            SECURE FILE TRANSFER
+          </p>
+
+          <h2 id="transfer-title">
+            Send a file to the selected browser
+          </h2>
+
+        </div>
+
+
+        <div class="send-form">
+
+          <label for="file-input">
+            File
+          </label>
+
+          <input
+            id="file-input"
+            type="file"
+          >
+
+
+          <button
+            id="send-file"
+            type="button"
+            disabled
+          >
+            SEND FILE
+          </button>
+
+
+          <div
+            class="send-feedback"
+            id="file-status"
+            hidden
+          ></div>
+
+
+          <p class="send-note">
+            The browser creates the secure package locally.
+            Flask only relays the encrypted package and does
+            not decrypt the file.
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =======================================================
+           INCOMING TRANSFERS
+           ======================================================= -->
+
+      <section
+        class="key-management"
+        aria-labelledby="incoming-title"
+      >
+
+        <div class="key-heading">
+
+          <p class="eyebrow">
+            INCOMING TRANSFERS
+          </p>
+
+          <h2 id="incoming-title">
+            Files waiting for this browser
+          </h2>
+
+        </div>
+
+
+        <ul
+          class="key-list"
+          id="transfer-list"
+        >
+
+          <li
+            id="transfer-empty"
+            class="key-item"
+          >
+
+            <div>
+
+              <h3>
+                No incoming files
+              </h3>
+
+              <p>
+                Incoming files will appear here when
+                another connected browser sends one.
+              </p>
+
+            </div>
+
+            <span class="key-availability">
+              READY
+            </span>
+
+          </li>
+
+        </ul>
+
+      </section>
+
+
+      <!-- =======================================================
+           PACKAGE INSPECTION
+           ======================================================= -->
+
+      <section
+        class="key-management"
+        aria-labelledby="inspection-title"
+      >
+
+        <div class="key-heading">
+
+          <p class="eyebrow">
+            PACKAGE INSPECTION
+          </p>
+
+          <h2 id="inspection-title">
+            Non-secret package details
+          </h2>
+
+        </div>
+
+
+        <div
+          id="package-inspection"
+          class="package-inspection"
+          hidden
+        >
+
+          <div
+            id="package-inspection-content"
+          ></div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =======================================================
+           DIAGNOSTIC MESSAGE TEST
+           ======================================================= -->
+
+      <section
+        class="key-management"
+        aria-labelledby="test-title"
+      >
+
+        <div class="key-heading">
+
+          <p class="eyebrow">
+            DIAGNOSTIC TEST
+          </p>
+
+          <h2 id="test-title">
+            Browser-to-browser message
+          </h2>
+
+        </div>
+
+
+        <details class="test-panel">
+
+          <summary>
+            Open connection test
+          </summary>
+
+
+          <p>
+            Selected peer:
+
+            <strong id="selected-peer">
+              None
+            </strong>
+          </p>
+
+
+          <div class="test-controls">
+
+            <input
+              id="test-message"
+              type="text"
+              maxlength="4096"
+              placeholder="Type a test message"
+              value="Hello"
+            >
+
+
+            <button
+              id="send-test"
+              type="button"
+              disabled
+            >
+              SEND TEST
+            </button>
+
+          </div>
+
+
+          <ul
+            id="message-log"
+            class="message-log"
+            aria-live="polite"
+          ></ul>
+
+        </details>
+
+      </section>
+
     </section>
+
   </main>
 
+
+  <!-- =========================================================
+       FOOTER
+       ========================================================= -->
+
   <footer>
-    <span>SECURE FILE SHARING USING HYBRID ENCRYPTION</span>
-    <span>LOCAL DEVELOPMENT · NO FILES ARE TRANSFERRED</span>
+
+    <span>
+      SECURE FILE SHARING USING HYBRID ENCRYPTION
+    </span>
+
+    <span>
+      BROWSER CRYPTO · LAN RELAY
+    </span>
+
   </footer>
+
 </body>
 </html>
