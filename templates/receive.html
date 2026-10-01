@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f5ef">
+  <title>Receive a File | Secure File Sharing</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Secure File Sharing home">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span>SECURE FILE SHARING</span>
+    </a>
+    <a class="back-link" href="{{ url_for('home') }}">Back to overview</a>
+  </header>
+
+  <main class="send-main">
+    <p class="eyebrow">FILE DECRYPTION · RECEIVER</p>
+    <h1>Receive a file.</h1>
+    <p class="lede">Upload an encrypted package. The receiver's private key opens its protected AES key, then AES-256-GCM verifies and decrypts the file.</p>
+
+    {% if error %}
+    <p class="send-feedback send-error" role="alert">{{ error }}</p>
+    {% endif %}
+
+    {% if decrypted_filename %}
+    <section class="send-feedback" role="status" aria-live="polite">
+      <h2>File decrypted successfully</h2>
+      <p><strong>Original file:</strong> {{ original_filename }}</p>
+      <p><strong>Algorithms:</strong> RSA-OAEP with SHA-256 and AES-256-GCM</p>
+      <p><a class="back-link" href="{{ url_for('download_decrypted_file', filename=decrypted_filename) }}">Download decrypted file</a></p>
+    </section>
+    {% endif %}
+
+    <form class="send-form" action="{{ url_for('receive_file') }}" method="post" enctype="multipart/form-data">
+      <label for="package">Select Encrypted Package</label>
+      <input id="package" name="package" type="file" accept=".sfs,application/json" required>
+      <button type="submit">Decrypt Package</button>
+    </form>
+
+    <p class="send-note">The receiver's private key stays in the local keys/ directory and is never sent to the browser.</p>
+  </main>
+
+  <footer>
+    <span>SECURE FILE SHARING USING HYBRID ENCRYPTION</span>
+    <span>LOCAL DEVELOPMENT · RSA-OAEP + AES-GCM</span>
+  </footer>
+</body>
+</html>

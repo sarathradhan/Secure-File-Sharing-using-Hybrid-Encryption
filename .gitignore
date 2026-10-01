@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.py[cod]
+instance/
+
+/keys/*
+!/keys/.gitkeep
+/uploads/*
+!/uploads/.gitkeep
+/encrypted/*
+!/encrypted/.gitkeep
+/decrypted/*
+!/decrypted/.gitkeep

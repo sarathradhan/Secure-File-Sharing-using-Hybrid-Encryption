@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f5ef">
+  <title>Secure File Sharing | Hybrid Encryption</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Secure File Sharing home">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span>SECURE FILE SHARING</span>
+    </a>
+    <div class="top-actions">
+      <a class="top-action" href="{{ url_for('send_file') }}">Send a file</a>
+      <a class="top-action" href="{{ url_for('receive_file') }}">Receive a file</a>
+      <span class="status"><span class="status-dot"></span> RSA KEYS READY</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">CRYPTOGRAPHY &amp; NETWORK SECURITY</p>
+      <h1 id="page-title">A safer route<br>for your files.</h1>
+      <p class="lede">A local proof of concept for protecting a file before it moves from sender to receiver, using hybrid encryption and verifiable identity.</p>
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <p><strong>Hybrid encryption is ready</strong><br>Encrypt a file for the receiver, then use their private key to recover it.</p>
+      </div>
+    </section>
+
+    <section class="design" aria-labelledby="design-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">THE SECURITY DESIGN</p>
+          <h2 id="design-title">Four layers, one protected file.</h2>
+        </div>
+        <span class="design-index">01 — 04</span>
+      </div>
+      <ol class="layers">
+        <li>
+          <span class="layer-number">01</span>
+          <div><h3>Encrypt the file</h3><p>AES-256-GCM protects file contents and authenticates the encrypted data.</p></div>
+          <span class="algorithm">AES-256-GCM</span>
+        </li>
+        <li>
+          <span class="layer-number">02</span>
+          <div><h3>Wrap the secret key</h3><p>RSA-2048 protects the AES key so only the intended receiver can recover it.</p></div>
+          <span class="algorithm">RSA-2048</span>
+        </li>
+        <li>
+          <span class="layer-number">03</span>
+          <div><h3>Check integrity</h3><p>A SHA-256 digest helps detect unexpected changes to the file.</p></div>
+          <span class="algorithm">SHA-256</span>
+        </li>
+        <li>
+          <span class="layer-number">04</span>
+          <div><h3>Verify the sender</h3><p>A digital signature lets the receiver verify who sent the file.</p></div>
+          <span class="algorithm">RSA SIGNATURE</span>
+        </li>
+      </ol>
+
+      <section class="key-management" aria-labelledby="key-management-title">
+        <div class="key-heading">
+          <p class="eyebrow">LOCAL KEY STORE</p>
+          <h2 id="key-management-title">Key Management</h2>
+        </div>
+        <ul class="key-list">
+          <li class="key-item">
+            <div>
+              <h3>Sender Public Key</h3>
+              <p>Used by the receiver to verify sender signatures.</p>
+            </div>
+            <span class="key-availability">{{ 'Available' if sender_public_available else 'Unavailable' }}</span>
+          </li>
+          <li class="key-item">
+            <div>
+              <h3>Receiver Public Key</h3>
+              <p>Used by the sender to protect a key for the receiver.</p>
+            </div>
+            <span class="key-availability">{{ 'Available' if receiver_public_available else 'Unavailable' }}</span>
+          </li>
+        </ul>
+        <p class="key-footnote">The sender private key will sign files; the receiver private key will open keys intended for them. Private key contents are never rendered here.</p>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <span>SECURE FILE SHARING USING HYBRID ENCRYPTION</span>
+    <span>LOCAL DEVELOPMENT · NO FILES ARE TRANSFERRED</span>
+  </footer>
+</body>
+</html>

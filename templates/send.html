@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f5ef">
+  <title>Send a File | Secure File Sharing</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Secure File Sharing home">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span>SECURE FILE SHARING</span>
+    </a>
+    <a class="back-link" href="{{ url_for('home') }}">Back to overview</a>
+  </header>
+
+  <main class="send-main">
+    <p class="eyebrow">FILE ENCRYPTION · SENDER</p>
+    <h1>Select a file.</h1>
+    <p class="lede">Encrypt a local file with AES-256-GCM before sharing it.</p>
+
+    {% if error %}
+    <p class="send-feedback send-error" role="alert">{{ error }}</p>
+    {% endif %}
+
+    {% if encrypted_filename %}
+    <output class="send-feedback" aria-live="polite">
+      <h2>File encrypted successfully</h2>
+      <p><strong>Algorithm:</strong> AES-256-GCM</p>
+      <p><strong>Key protection:</strong> RSA-OAEP with SHA-256</p>
+      <p><a class="back-link" href="{{ download_url }}">Download encrypted package</a></p>
+    </output>
+    {% endif %}
+
+    <form class="send-form" action="{{ url_for('send_file') }}" method="post" enctype="multipart/form-data">
+      <label for="file">Select File</label>
+      <input id="file" name="file" type="file" required>
+      <button type="submit">Encrypt File</button>
+    </form>
+
+    <p class="send-note">The package contains the encrypted file and RSA-protected AES key. The plaintext AES key is never stored. Give the package to the receiver for decryption.</p>
+  </main>
+
+  <footer>
+    <span>SECURE FILE SHARING USING HYBRID ENCRYPTION</span>
+    <span>LOCAL DEVELOPMENT · AES-256-GCM</span>
+  </footer>
+</body>
+</html>
